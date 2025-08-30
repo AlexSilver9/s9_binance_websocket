@@ -15,7 +15,7 @@ pub struct BinanceWebSocketConnection {
 
 impl std::fmt::Display for BinanceWebSocketConnection {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}://{}:{}{}",
+        write!(f, "{}://{}:{}{}?timeUnit=MICROSECOND",
                self.protocol,
                self.host,
                self.port,
