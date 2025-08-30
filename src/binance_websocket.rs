@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 use std::error::Error;
 use s9_binance_codec::websocket::SubscriptionRequest;
-use s9_websocket::websocket::{S9WebSocketClient, S9WebSocketClientHandler};
+pub use s9_websocket::websocket::{S9WebSocketClient};
+// re-export for lib users
+pub use s9_websocket::websocket::{S9WebSocketClientHandler};
 
 pub struct BinanceWebSocketConnection {
     pub protocol: String,
