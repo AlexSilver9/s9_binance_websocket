@@ -11,15 +11,21 @@ pub struct BinanceWebSocketConnection {
     pub port: u16,
     pub path: String,
     pub headers: HashMap<String, String>,
+    pub microsecond_resolution: bool,
 }
 
 impl std::fmt::Display for BinanceWebSocketConnection {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}://{}:{}{}?timeUnit=MICROSECOND",
+        write!(f, "{}://{}:{}{}{}",
                self.protocol,
                self.host,
                self.port,
-               self.path
+               self.path,
+               if self.microsecond_resolution {
+                   "?timeUnit=MICROSECOND"
+               } else {
+                   ""
+               }
         )
     }
 }
