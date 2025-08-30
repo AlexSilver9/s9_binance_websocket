@@ -1,0 +1,13 @@
+[package]
+name = "s9_binance_websocket"
+version = "0.0.1"
+edition = "2024"
+authors = ["Alexander Silvennoinen <alex@silvennoinen.de>"]
+
+[lib]
+name = "s9_binance_websocket"
+path = "src/lib.rs"
+
+[dependencies]
+s9_websocket = { git = "https://github.com/AlexSilver9/s9_websocket.git" }
+s9_binance_codec = { git = "https://github.com/AlexSilver9/s9_binance_codec.git" }
