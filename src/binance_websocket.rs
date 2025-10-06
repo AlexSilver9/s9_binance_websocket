@@ -1,9 +1,11 @@
+use s9_binance_codec::websocket::SubscriptionRequest;
 use std::collections::HashMap;
 use std::error::Error;
-use s9_binance_codec::websocket::SubscriptionRequest;
-pub use s9_websocket::websocket::{S9WebSocketClient};
+use std::sync::mpsc;
 // re-export for lib users
-pub use s9_websocket::websocket::{S9WebSocketClientHandler};
+pub use s9_websocket::websocket::ControlMessage;
+pub use s9_websocket::websocket::S9WebSocketClient;
+pub use s9_websocket::websocket::S9WebSocketClientHandler;
 
 pub struct BinanceWebSocketConnection {
     pub protocol: String,
@@ -47,11 +49,11 @@ impl BinanceWebSocket {
         })
     }
 
-    pub fn run<HANDLER>(&mut self, handler: &mut HANDLER)
+    pub fn run<HANDLER>(&mut self, handler: &mut HANDLER, control_rx: mpsc::Receiver<ControlMessage>)
     where
         HANDLER: S9WebSocketClientHandler,
     {
-        self.s9_websocket_client.run(handler);
+        self.s9_websocket_client.run(handler, control_rx);
     }
 
     pub fn subscribe_to_streams(&mut self, streams: Vec<String>) -> Result<(), Box<dyn Error>> {
