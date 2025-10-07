@@ -9,5 +9,5 @@ name = "s9_binance_websocket"
 path = "src/lib.rs"
 
 [dependencies]
-s9_websocket = { git = "https://github.com/AlexSilver9/s9_websocket.git" }
+s9_websocket = { git = "https://github.com/AlexSilver9/s9_websocket.git", branch = "feat/message-queueing" }
 s9_binance_codec = { git = "https://github.com/AlexSilver9/s9_binance_codec.git" }

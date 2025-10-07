@@ -1,7 +1,6 @@
 use s9_binance_codec::websocket::SubscriptionRequest;
 use std::collections::HashMap;
 use std::error::Error;
-use std::sync::mpsc;
 // re-export for lib users
 pub use s9_websocket::websocket::ControlMessage;
 pub use s9_websocket::websocket::S9WebSocketClient;
@@ -28,6 +27,7 @@ impl std::fmt::Display for BinanceWebSocketConnection {
 
 pub struct BinanceWebSocketConfig {
     pub connection: BinanceWebSocketConnection,
+    pub max_queue_size: usize,
 }
 
 pub struct BinanceWebSocket {
@@ -40,7 +40,11 @@ impl BinanceWebSocket {
 
     pub fn connect(config: BinanceWebSocketConfig) -> Result<BinanceWebSocket, Box<dyn Error>> {
         let url = config.connection.to_string();
-        let s9_websocket_client = S9WebSocketClient::connect_with_headers(url.as_str(), &config.connection.headers)?;
+        let s9_websocket_client = S9WebSocketClient::connect_with_headers(
+            url.as_str(),
+            &config.connection.headers,
+            config.max_queue_size,
+        )?;
 
         Ok(BinanceWebSocket {
             config,
@@ -49,11 +53,11 @@ impl BinanceWebSocket {
         })
     }
 
-    pub fn run<HANDLER>(&mut self, handler: &mut HANDLER, control_rx: mpsc::Receiver<ControlMessage>)
+    pub fn run<HANDLER>(&mut self, handler: &mut HANDLER)
     where
         HANDLER: S9WebSocketClientHandler,
     {
-        self.s9_websocket_client.run(handler, control_rx);
+        self.s9_websocket_client.run(handler);
     }
 
     pub fn subscribe_to_streams(&mut self, streams: Vec<String>) -> Result<(), Box<dyn Error>> {
