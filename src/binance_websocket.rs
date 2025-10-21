@@ -1,7 +1,7 @@
 use s9_binance_codec::websocket::SubscriptionRequest;
 use std::collections::HashMap;
 use std::error::Error;
-use std::sync::mpsc;
+use crossbeam_channel::Receiver;
 // re-export for lib users
 pub use s9_websocket::websocket::ControlMessage;
 pub use s9_websocket::websocket::S9WebSocketClient;
@@ -49,7 +49,7 @@ impl BinanceWebSocket {
         })
     }
 
-    pub fn run<HANDLER>(&mut self, handler: &mut HANDLER, control_rx: mpsc::Receiver<ControlMessage>)
+    pub fn run<HANDLER>(&mut self, handler: &mut HANDLER, control_rx: Receiver<ControlMessage>)
     where
         HANDLER: S9WebSocketClientHandler,
     {
