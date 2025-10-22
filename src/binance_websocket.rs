@@ -47,7 +47,7 @@ impl BinanceNonBlockingWebSocket {
         })
     }
 
-    pub fn run_non_blocking(self) {
+    pub fn run_non_blocking(&mut self) {
         self.s9_websocket_client.run_non_blocking()
     }
 
