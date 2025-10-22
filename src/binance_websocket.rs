@@ -32,7 +32,7 @@ impl std::fmt::Display for BinanceWebSocketConnection {
 }
 
 pub struct BinanceNonBlockingWebSocket {
-    s9_websocket_client: S9NonBlockingWebSocketClient,
+    pub s9_websocket_client: S9NonBlockingWebSocketClient,
     sequence: u64,
 }
 
