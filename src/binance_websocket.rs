@@ -6,7 +6,7 @@ use crossbeam_channel::{Receiver};
 pub use s9_websocket::websocket::ControlMessage;
 pub use s9_websocket::websocket::S9WebSocketClientHandler;
 pub use s9_websocket::websocket::{S9BlockingWebSocketClient, S9NonBlockingWebSocketClient, WebSocketEvent};
-pub use s9_websocket::websocket::NonBlockingStrategy;
+pub use s9_websocket::websocket::NonBlockingOptions;
 
 pub struct BinanceWebSocketConfig {
     pub connection: BinanceWebSocketConnection,
@@ -47,8 +47,8 @@ impl BinanceNonBlockingWebSocket {
         })
     }
 
-    pub fn run_non_blocking(&mut self, non_blocking_strategy: NonBlockingStrategy) {
-        self.s9_websocket_client.run_non_blocking(non_blocking_strategy)
+    pub fn run_non_blocking(&mut self, non_blocking_options: NonBlockingOptions) {
+        self.s9_websocket_client.run_non_blocking(non_blocking_options)
     }
 
 
