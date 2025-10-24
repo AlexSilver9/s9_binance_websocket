@@ -47,7 +47,7 @@ impl BinanceNonBlockingWebSocket {
         })
     }
 
-    pub fn run_non_blocking(&mut self, non_blocking_options: NonBlockingOptions) {
+    pub fn run_non_blocking(&mut self, non_blocking_options: NonBlockingOptions) -> Result<(), Box<dyn Error>> {
         self.s9_websocket_client.run_non_blocking(non_blocking_options)
     }
 
