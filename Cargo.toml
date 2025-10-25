@@ -12,3 +12,4 @@ path = "src/lib.rs"
 s9_websocket = { git = "https://github.com/AlexSilver9/s9_websocket.git" }
 s9_binance_codec = { git = "https://github.com/AlexSilver9/s9_binance_codec.git" }
 crossbeam-channel = "0.5"
+serde_json = "1.0"

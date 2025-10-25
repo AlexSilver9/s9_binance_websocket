@@ -1,12 +1,13 @@
 use s9_binance_codec::websocket::SubscriptionRequest;
 use std::collections::HashMap;
-use std::error::Error;
 use crossbeam_channel::{Receiver};
 // re-export for lib users
-pub use s9_websocket::websocket::ControlMessage;
-pub use s9_websocket::websocket::S9WebSocketClientHandler;
-pub use s9_websocket::websocket::{S9BlockingWebSocketClient, S9NonBlockingWebSocketClient, WebSocketEvent};
-pub use s9_websocket::websocket::NonBlockingOptions;
+pub use s9_websocket::ControlMessage;
+pub use s9_websocket::S9WebSocketClientHandler;
+pub use s9_websocket::{S9BlockingWebSocketClient, S9NonBlockingWebSocketClient, WebSocketEvent};
+pub use s9_websocket::NonBlockingOptions;
+pub use s9_websocket::{S9Result, S9WebSocketError};
+use crate::error::BinanceResult;
 
 pub struct BinanceWebSocketConfig {
     pub connection: BinanceWebSocketConnection,
@@ -37,7 +38,7 @@ pub struct BinanceNonBlockingWebSocket {
 }
 
 impl BinanceNonBlockingWebSocket {
-    pub fn connect(config: BinanceWebSocketConfig) -> Result<Self, Box<dyn Error>> {
+    pub fn connect(config: BinanceWebSocketConfig) -> BinanceResult<Self> {
         let url = config.connection.to_string();
         let s9_websocket_client = S9NonBlockingWebSocketClient::connect_with_headers(url.as_str(), &config.connection.headers)?;
 
@@ -47,12 +48,12 @@ impl BinanceNonBlockingWebSocket {
         })
     }
 
-    pub fn run_non_blocking(&mut self, non_blocking_options: NonBlockingOptions) -> Result<(), Box<dyn Error>> {
-        self.s9_websocket_client.run_non_blocking(non_blocking_options)
+    pub fn run_non_blocking(&mut self, non_blocking_options: NonBlockingOptions) -> BinanceResult<()> {
+        Ok(self.s9_websocket_client.run_non_blocking(non_blocking_options)?)
     }
 
 
-    pub fn subscribe_to_streams_non_blocking(&mut self, streams: Vec<String>) -> Result<(), Box<dyn Error>> {
+    pub fn subscribe_to_streams_non_blocking(&mut self, streams: Vec<String>) -> BinanceResult<()> {
         let mut request = SubscriptionRequest::new(self.sequence);
         for stream in streams {
             request.add_stream(stream.as_str());
@@ -70,7 +71,7 @@ pub struct BinanceBlockingWebSocket {
 }
 
 impl BinanceBlockingWebSocket {
-    pub fn connect(config: BinanceWebSocketConfig) -> Result<Self, Box<dyn Error>> {
+    pub fn connect(config: BinanceWebSocketConfig) -> BinanceResult<Self> {
         let url = config.connection.to_string();
         let s9_websocket_client = S9BlockingWebSocketClient::connect_with_headers(url.as_str(), &config.connection.headers)?;
 
@@ -88,7 +89,7 @@ impl BinanceBlockingWebSocket {
     }
 
 
-    pub fn subscribe_to_streams_blocking(&mut self, streams: Vec<String>) -> Result<(), Box<dyn Error>> {
+    pub fn subscribe_to_streams_blocking(&mut self, streams: Vec<String>) -> BinanceResult<()> {
         let mut request = SubscriptionRequest::new(self.sequence);
         for stream in streams {
             request.add_stream(stream.as_str());
